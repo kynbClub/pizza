@@ -1,0 +1,97 @@
+#set($doPackage=$package.Entity.replace("model.po",$!{table.serviceName}))
+package $!{doPackage};
+
+#if($!{entityLombokModel})
+import lombok.Data;
+import lombok.experimental.Accessors;
+#end
+import java.io.Serializable;
+import java.util.Date;
+/**
+ * $!{table.comment}领域实体类
+ *
+ * @author $!{author}
+ * @since $!{date}
+ */
+#if($!{entityLombokModel})
+@Data
+@Accessors(chain = true)
+#end
+public class $!{entity} {
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in $!{table.fields})
+###if($!{field.name}!=$!{cfg.tenantColumn})
+#if($!{field.keyFlag})
+	#set($keyPropertyName=$!{field.propertyName})
+#end
+#if("$!field.comment" != "")
+	/**
+	 * $!{field.comment}
+	 */
+#end
+#if($!{field.keyFlag})
+## 主键
+#if($!{field.keyIdentityFlag})
+
+#elseif(!$null.isNull($!{idType}) && "$!idType" != "")
+
+#elseif($!{field.convert})
+
+#end
+## 普通字段
+#elseif($!{field.fill})
+## -----   存在字段填充设置   -----
+#if($!{field.convert})
+#else
+#end
+#elseif($!{field.convert})
+#end
+## 乐观锁注解
+#if($!{versionFieldName}==$!{field.name})
+#end
+## 逻辑删除注解
+#if($!{logicDeleteFieldName}==$!{field.name})
+#end
+    private $!{field.propertyType} $!{field.propertyName};
+#end
+###end
+## ----------  END 字段循环遍历  ----------
+
+
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in $!{table.commonFields})
+###if($!{field.name}!=$!{cfg.tenantColumn})
+#if($!{field.keyFlag})
+	#set($keyPropertyName=$!{field.propertyName})
+#end
+#if("$!field.comment" != "")
+	/**
+	 * $!{field.comment}
+	 */
+#end
+#if($!{field.keyFlag})
+## 主键
+#if($!{field.keyIdentityFlag})
+#elseif(!$null.isNull($!{idType}) && "$!idType" != "")
+#elseif($!{field.convert})
+#end
+## 普通字段
+#elseif($!{field.fill})
+## -----   存在字段填充设置   -----
+#if($!{field.convert})
+#else
+#end
+#elseif($!{field.convert})
+#end
+## 乐观锁注解
+#if($!{versionFieldName}==$!{field.name})
+#end
+## 逻辑删除注解
+#if($!{logicDeleteFieldName}==$!{field.name})
+#end
+    private $!{field.propertyType} $!{field.propertyName};
+
+#end
+## ----------  END 字段循环遍历  ----------
+
+}

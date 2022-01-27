@@ -1,0 +1,24 @@
+#set($mapperPackage=$package.Entity.replace("model.po",$!{table.serviceName}))
+#set($poPackage=$mapperPackage.replace("mapper","po"))
+package $!{mapperPackage};
+
+import $!{poPackage}.$!{entity}PO;
+import $!{superMapperClassPackage};
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
+/**
+ * $!{table.comment} Mapper 接口
+ *
+ * @author $!{author}
+ * @since $!{date}
+ */
+#if($!{kotlin})
+interface $!{table.mapperName} : $!{superMapperClass}<$!{entity}>
+#else
+@Mapper
+public interface $!{table.mapperName} extends $!{superMapperClass}<$!{entity}PO> {
+
+
+}
+#end

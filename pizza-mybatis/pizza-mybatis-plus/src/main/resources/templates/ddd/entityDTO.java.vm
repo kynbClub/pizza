@@ -1,0 +1,43 @@
+#set($dtoPackage=$package.Entity.replace("model.po",$!{table.serviceName}))
+package $!{dtoPackage};
+
+import org.pizza.model.DTO;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+import lombok.experimental.Accessors;
+import java.util.Date;
+
+/**
+ * $!{table.comment}数据传输实体类
+ *
+ * @author $!{author}
+ * @since $!{date}
+ */
+
+@Data
+@ApiModel(value = "$!{entity}DTO对象", description = #if ("$!{table.comment}"=="")"$!{entity}DTO对象"#else"$!{table.comment}"#end)
+@Accessors(chain = true)
+public class $!{entity}DTO implements DTO {
+    private static final long serialVersionUID = 1L;
+
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in $!{table.fields})
+#if($!{field.name}!=$!{cfg.tenantColumn})
+    /**
+     * $!{field.comment}
+     */
+    @ApiModelProperty(value = "$!{field.comment}", example = "")
+    private $!{field.propertyType} $!{field.propertyName};
+#end
+#end
+## ----------  END 字段循环遍历  ----------
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in $!{table.commonFields})
+    /**
+     * $!{field.comment}
+     */
+    @ApiModelProperty(value = "$!{field.comment}", example = "")
+    private $!{field.propertyType} $!{field.propertyName};
+#end
+}

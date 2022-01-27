@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.pizza.cache.autoconfigure.RedisCacheConfigurer,\
+org.pizza.cache.autoconfigure.RedissonAutoConfiguration

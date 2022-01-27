@@ -1,0 +1,4 @@
+${AnsiColor.BRIGHT_CYAN}      .6o.6.   .oo。   o6.oo。  o6.oo。      o6
+${AnsiColor.BRIGHT_CYAN}      o   o6   .6       o6       o6       o6 o。
+${AnsiColor.BRIGHT_CYAN}     o6..o.    6      o6       o6       o6.o.o。
+${AnsiColor.BRIGHT_CYAN}    6o      .o6o   .o6ooo。  .o6ooo。  .o6   .o。  ${AnsiColor.BRIGHT_GREEN}(2021) - ${AnsiColor.BRIGHT_MAGENTA} ${spring.application.name}

@@ -1,0 +1,132 @@
+#set($voPackage=$package.Entity.replace("pojo","vo"))
+package $!{voPackage};
+
+import com.baida.common.model.Convertor;
+import com.baida.common.model.vo.VO;
+import $!{package.Entity}.$!{entity};
+#if($!{entityLombokModel})
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import cn.hutool.core.bean.BeanUtil;
+#end
+#if($!{swagger2})
+import io.swagger.annotations.ApiModel;
+#end
+import java.io.Serializable;
+
+/**
+ * $!{table.comment}视图实体类
+ *
+ * @author $!{author}
+ * @since $!{date}
+ */
+#if($!{entityLombokModel})
+@Data
+#end
+#if($!{swagger2})
+@ApiModel(value = "$!{entity}VO对象", description = #if ("$!{table.comment}"=="")"$!{entity}VO对象"#else"$!{table.comment}"#end)
+#end
+public class $!{entity}VO implements VO ,Convertor<$!{entity}, $!{entity}VO> {
+	private static final long serialVersionUID = 1L;
+
+
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in $!{table.fields})
+#if($!{field.name}!=$!{cfg.tenantColumn})
+#if($!{field.keyFlag})
+	#set($keyPropertyName=$!{field.propertyName})
+#end
+#if("$!field.comment" != "")
+	/**
+	 * $!{field.comment}
+	 */
+	#if($!{swagger2})
+	@ApiModelProperty(value = "$!{field.comment}", example = "")
+	#end
+#end
+#if($!{field.keyFlag})
+## 主键
+#if($!{field.keyIdentityFlag})
+    @TableId(value = "$!{field.name}", type = IdType.AUTO)
+#elseif(!$null.isNull($!{idType}) && "$!idType" != "")
+    @TableId(value = "$!{field.name}", type = IdType.$!{idType})
+#elseif($!{field.convert})
+     @TableId("$!{field.name}")
+#end
+## 普通字段
+#elseif($!{field.fill})
+## -----   存在字段填充设置   -----
+#if($!{field.convert})
+    @TableField(value = "$!{field.name}", fill = FieldFill.$!{field.fill})
+#else
+    @TableField(fill = FieldFill.$!{field.fill})
+#end
+#elseif($!{field.convert})
+     @TableField("$!{field.name}")
+#end
+## 乐观锁注解
+#if($!{versionFieldName}==$!{field.name})
+    @Version
+#end
+## 逻辑删除注解
+#if($!{logicDeleteFieldName}==$!{field.name})
+##    @TableLogic
+#end
+    private $!{field.propertyType} $!{field.propertyName};
+#end
+#end
+## ----------  END 字段循环遍历  ----------
+
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in $!{table.commonFields})
+###if($!{field.name}!=$!{cfg.tenantColumn})
+#if($!{field.keyFlag})
+	#set($keyPropertyName=$!{field.propertyName})
+#end
+#if("$!field.comment" != "")
+	/**
+	 * $!{field.comment}
+	 */
+	#if($!{swagger2})
+	@ApiModelProperty(value = "$!{field.comment}", example = "")
+	#end
+#end
+#if($!{field.keyFlag})
+## 主键
+#if($!{field.keyIdentityFlag})
+    @TableId(value = "$!{field.name}", type = IdType.AUTO)
+#elseif(!$null.isNull($!{idType}) && "$!idType" != "")
+    @TableId(value = "$!{field.name}", type = IdType.$!{idType})
+#elseif($!{field.convert})
+     @TableId("$!{field.name}")
+#end
+## 普通字段
+#elseif($!{field.fill})
+## -----   存在字段填充设置   -----
+#if($!{field.convert})
+    @TableField(value = "$!{field.name}", fill = FieldFill.$!{field.fill})
+#else
+    @TableField(fill = FieldFill.$!{field.fill})
+#end
+#elseif($!{field.convert})
+     @TableField("$!{field.name}")
+#end
+## 乐观锁注解
+#if($!{versionFieldName}==$!{field.name})
+    @Version
+#end
+## 逻辑删除注解
+#if($!{logicDeleteFieldName}==$!{field.name})
+    @TableLogic
+#end
+    private $!{field.propertyType} $!{field.propertyName};
+#end
+###end
+## ----------  END 字段循环遍历  ----------
+
+
+    @Override
+    public $!{entity}VO c($!{entity} entity) {
+        return BeanUtil.copyProperties(entity, this.getClass());
+    }
+}
